@@ -3,25 +3,21 @@ class Players
     PRIOR = [4, 0, 2, 6, 8, 1, 3, 5, 7]
     
     def move(board)
+      puts "Now is the Computer's round."
       @board = board.cells
-      result = PRIOR.sample
-      if @board.select{|i| i == self.token}.size >= 2
-        win_move_result = self.win_move
-        if !win_move_result
-          result = self.prior_move
-        else
-          result = win_move_result
-        end
-      else
-         result = self.prior_move
-      end
-      (result + 1).to_s
+      result = win_move(self.token)
+      return self.index_to_input(result) if result
+      result = win_move(self.token == "X" ? "O" : "X")
+      return self.index_to_input(result) if result
+      result = self.prior_move ? self.prior_move : PRIOR.sample
+      puts "Computer move to #{result + 1}th cell."
+      self.index_to_input(result)
     end
 
-    def win_move
+    def win_move(character)
       moved = []
       @board.each_with_index do |i, index|
-        moved << index if i == self.token
+        moved << index if i == character
       end
       Game::WIN_COMBINATIONS.each do |arr|
         arr_copy = arr.dup
@@ -45,6 +41,10 @@ class Players
 
     def taken?(index)
       @board[index] != " "
+    end
+
+    def index_to_input(index)
+      (index + 1).to_s
     end
   end
 end
