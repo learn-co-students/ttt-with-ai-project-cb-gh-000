@@ -1,23 +1,21 @@
 class Players
   class Computer < Player
-    PRIOR = {
-      1: [4],
-      2: [0, 2, 6, 8]
-      3: [1, 3, 5, 7]
-    }
+    PRIOR = [4, 0, 2, 6, 8, 1, 3, 5, 7]
     
     def move(board)
-      @board = board
+      @board = board.cells
+      result = PRIOR.sample
       if @board.select{|i| i == self.token}.size >= 2
         win_move_result = self.win_move
         if !win_move_result
-          self.prior_move
+          result = self.prior_move
         else
-          win_move_result
+          result = win_move_result
         end
       else
-        self.prior_move
+         result = self.prior_move
       end
+      (result + 1).to_s
     end
 
     def win_move
@@ -40,10 +38,13 @@ class Players
     end
 
     def prior_move
+      PRIOR.each do |move|
+        return move if !self.taken?(move)
+      end
     end
 
     def taken?(index)
-      board[index] != " "
+      @board[index] != " "
     end
   end
 end

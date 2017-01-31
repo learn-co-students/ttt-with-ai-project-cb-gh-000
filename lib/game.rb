@@ -43,7 +43,7 @@ class Game
   end
 
   def turn
-    move = self.current_player.move(@board.cells)
+    move = self.current_player.move(@board)
     @board.valid_move?(move) ? @board.update(move, self.current_player) : self.turn
   end
 
