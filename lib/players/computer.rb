@@ -1,6 +1,13 @@
 class Players
   class Computer < Player
-    PRIOR = [4, 0, 2, 6, 8, 1, 3, 5, 7]
+
+    def initialize(token)
+      super(token)
+      @prior = [4, [0, 2, 6, 8], [1, 3, 5, 7]]
+      @prior[1].shuffle!
+      @prior[2].shuffle!
+      @prior.flatten!
+    end
     
     def move(board)
       puts "Now is the Computer's round."
@@ -9,7 +16,7 @@ class Players
       return self.index_to_input(result) if result
       result = win_move(self.token == "X" ? "O" : "X")
       return self.index_to_input(result) if result
-      result = self.prior_move ? self.prior_move : PRIOR.sample
+      result = self.prior_move ? self.prior_move : @prior.sample
       puts "Computer move to #{result + 1}th cell."
       self.index_to_input(result)
     end
@@ -34,7 +41,7 @@ class Players
     end
 
     def prior_move
-      PRIOR.each do |move|
+      @prior.each do |move|
         return move if !self.taken?(move)
       end
     end
