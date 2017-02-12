@@ -33,7 +33,7 @@ class Game
   end
 
   def draw?
-    (self.over? and !self.won?) ? true : false
+    (@board.full? and !self.won?) ? true : false
   end
 
   def winner
