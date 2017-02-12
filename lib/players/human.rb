@@ -1,9 +1,9 @@
 module Players
 
   class Human < Player
-    def move
-      input = gets.chomp
-      input
+    def move(board = [])
+      input = gets
+      input.chomp
     end
   end
 end

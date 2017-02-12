@@ -12,12 +12,8 @@ class Game
   end
 
   def current_player
-    token = board.turn_count % 2 == 0 ? "X" : "O"
+    token = (board.turn_count % 2 == 0) ? "X" : "O"
     token.eql?(@player_1.token) ? @player_1 : @player_2
-  end
-
-  def over?
-    self.won? or @board.full?
   end
 
   def won?
@@ -32,8 +28,12 @@ class Game
     false
   end
 
+  def over?
+    self.won? or @board.full?
+  end
+
   def draw?
-    self.over? and !self.won? ? true : false
+    (self.over? and !self.won?) ? true : false
   end
 
   def winner
@@ -44,25 +44,24 @@ class Game
   def turn
     player = self.current_player
     loop do
-      if @board.update(player.move, player)
+      input = player.move
+      if @board.update(input, self.current_player)
         break
       end
     end
   end
 
   def play
-    self.turn
-    loop do
-      if self.over?
+    while (!self.over?) do
+      self.turn
+      if self.draw?
         break
-      else
-        self.turn
       end
     end
     if self.draw?
-      puts "Cat's Game"
+      puts "Cat's Game!"
     else
-      puts "Congratulation #{@winner}"
+      puts "Congratulations #{@winner}!"
     end
   end
 

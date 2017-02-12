@@ -27,13 +27,20 @@ class Board
   end
 
   def full?
-    !@cells.any? {|cell| cell.eql?(" ")}
+    @cells.each do |cell|
+      if cell.eql?(" ")
+        return false
+      end
+    end
+    true
   end
 
   def turn_count
     cells = []
     @cells.each do |cell|
-      !cell.eql?(" ") ? (cells << cell) : nil
+      if !cell.eql?(" ")
+        cells.push(cell)
+      end
     end
     cells.size
   end
