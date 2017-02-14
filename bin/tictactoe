@@ -1,3 +1,51 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+game = Game.new()
+
+loop do
+  puts "Game type:"
+  puts "1. Player vs Player"
+  puts "2. Player vs Ai"
+  puts "3. AI vs AI"
+  puts "Anything else to quit"
+
+  input = gets.chomp.to_i
+
+  case input
+    when 1
+      # Player vs Player
+      game.play
+      puts "Returning to Menu"
+      next
+    when 2
+      # Player vs AI
+      puts "Who is first(X)?"
+      puts "1. Player"
+      puts "2. AI"
+      puts "Anything else to go back"
+      input = gets.chomp.to_i
+      case input
+        when 1
+          # Player first
+          game.start(Players::Human.new("X"), Players::Computer.new("O"))
+          puts "Returning to Menu"
+          next
+        when 2
+          # AI first
+          game.start(Players::Computer.new("X"), Players::Human.new("O"))
+          puts "Returning to Menu"
+          next
+        else
+          next # Back to main
+      end
+    when 3
+      # AI vs AI
+      game.start(Players::Computer.new("X"), Players::Computer.new("O"))
+      puts "Returning to Menu"
+      next
+    else
+      break # Quit
+  end
+end

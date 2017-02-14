@@ -44,7 +44,8 @@ class Game
   def turn
     player = self.current_player
     loop do
-      input = player.move
+      puts "#{player.token} turn:"
+      input = player.move(@board)
       if @board.update(input, self.current_player)
         break
       end
@@ -54,6 +55,7 @@ class Game
   def play
     while (!self.over?) do
       self.turn
+      @board.display
       if self.draw?
         break
       end
@@ -65,7 +67,11 @@ class Game
     end
   end
 
-  def start
+  def start(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new())
+    @player_1 = player_1
+    @player_2 = player_2
+    @board = board
+    self.play
   end
 
 end
