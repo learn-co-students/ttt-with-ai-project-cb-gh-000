@@ -4,7 +4,7 @@ class Game
 
   attr_accessor :board, :player_1, :player_2
 
-  def initialize(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new())
+  def initialize(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)
     @player_1 = player_1
     @player_2 = player_2
     @board = board
@@ -36,27 +36,30 @@ class Game
     WIN_COMBINATIONS.collect{|combo|
       (@board.cells[combo[0]].eql?(@board.cells[combo[1]]) &&
        @board.cells[combo[1]].eql?(@board.cells[combo[2]]) &&
-       !@board.cells[combo[0]].eql?(" ")) || nil
+       !@board.cells[combo[0]].eql?(" ")) ? @board.cells[combo[0]] : nil
     }.compact.first
   end
 
   def turn
     loop do
       puts "#{current_player.token} turn:"
-      @board.update(current_player.move(@board), current_player) ? break : next
+      move = current_player.move(@board.cells)
+      @board.update(move, current_player) ? break : next
     end
   end
 
   def play
     while (!over?) do
       turn
+      3.times{puts ""}
       @board.display
       draw? ? break : next
     end
-    draw? ? puts "Cat's Game!" : puts "Congratulations #{@winner}!"
+    draw? ? (puts "Cat's Game!") : (puts "Congratulations #{winner}!")
+    3.times{puts ""}
   end
 
-  def start(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new())
+  def start(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)
     @player_1 = player_1
     @player_2 = player_2
     @board = board
