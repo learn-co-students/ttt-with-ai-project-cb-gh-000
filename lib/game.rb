@@ -40,9 +40,9 @@ class Game
     }.compact.first
   end
 
-  def turn
+  def turn(wargames = nil)
     loop do
-      puts "#{current_player.token} turn:"
+      puts "#{current_player.token} turn:" if wargames.nil?
       move = current_player.move(@board.cells)
       @board.update(move, current_player) ? break : next
     end
@@ -50,13 +50,40 @@ class Game
 
   def play
     while (!over?) do
-      turn
+      turn(nil)
       3.times{puts ""}
       @board.display
       draw? ? break : next
     end
     draw? ? (puts "Cat's Game!") : (puts "Congratulations #{winner}!")
     3.times{puts ""}
+  end
+
+  def wargames
+    results = []
+    100.times do
+      while (!over?) do
+        turn(true)
+        draw? ? break : next
+      end
+      draw? ? results << "Draw" : results << "#{winner}"
+      puts "Game #{results.size} over. Starting next game." if results.size < 100
+      puts "Game 100 over. Results are #{wargames_results(results)}" if results.size.eql?(100)
+    end
+  end
+
+  def wargames_results(results)
+    draws = results.collect{|e| e.eql?("Draw") ? 1 : nil}.compact.size
+    x_wins = results.collect{|e| e.eql?("X") ? 1 : nil}.compact.size
+    o_wins = results.collect{|e| e.eql?("O") ? 1 : nil}.compact.size
+    "Draws: #{draws}, Wins: X: #{x_wins}, O: #{o_wins}"
+  end
+
+  def play_wargames
+    @player_1 = Players::Computer.new("X")
+    @player_2 = Players::Computer.new("O")
+    @board = Board.new
+    wargames
   end
 
   def start(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)

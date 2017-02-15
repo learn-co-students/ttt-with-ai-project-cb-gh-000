@@ -18,8 +18,9 @@ module Players
     end
 
     def move(board)
-      if board.map{|e| e.eql?(" ") ? nil : e}.compact.size > 0
-        check_board = board.map{|e| e.eql?(" ") ? nil : e}
+      new_board = board.is_a?(Board) ? board.cells.dup : board.dup
+      if new_board.map{|e| e.eql?(" ") ? nil : e}.compact.size > 0
+        check_board = new_board.map{|e| e.eql?(" ") ? nil : e}
         @game_state = @game_state.children.detect{|e| e.board.eql?(check_board)}
       end
       @game_state = @game_state.children.max{|a, b| a.rank <=> b.rank}
@@ -71,7 +72,7 @@ module Players
 
     def intermediate_state_rank
       ranks = @children.collect{ |game_state| game_state.rank }
-      if @last_move[:token].eql?(@own_token)
+      if !@last_move[:token].eql?(@own_token)
         ranks.max
       else
         ranks.min
