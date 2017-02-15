@@ -18,12 +18,11 @@ module Players
     end
 
     def move(board)
-      check_board = board.dup
-      check_board.map!{|e| e.eql?(" ") ? nil : e}
-
-      next_game_state = @game_state.children.detect{|e| child.board.eql?(check_board)}
-      @game_state = next_game_state.children.max{|a, b| a.rank <=> b.rank}
-
+      if board.map{|e| e.eql?(" ") ? nil : e}.compact.size > 0
+        check_board = board.map{|e| e.eql?(" ") ? nil : e}
+        @game_state = @game_state.children.detect{|e| e.board.eql?(check_board)}
+      end
+      @game_state = @game_state.children.max{|a, b| a.rank <=> b.rank}
       (@game_state.last_move[:index] + 1).to_s
     end
 
@@ -38,7 +37,7 @@ module Players
     end
 
     def is_over?
-      is_won? || is_over?
+      is_won? || is_draw?
     end
 
     def is_won?
@@ -78,15 +77,16 @@ module Players
         ranks.min
       end
     end
+  end
 
   class GameTree
     def generate(current_game_state, current_player, own_token)
-      next_player = current_player.eq?("X") ? "O" : "X"
+      next_player = current_player.eql?("X") ? "O" : "X"
       current_game_state.board.each_with_index do |x, y|
         if x.nil?
           next_board = current_game_state.board.dup
           next_board[y] = current_player
-          next_game_state = GameState(next_board)
+          next_game_state = GameState.new(next_board)
           next_game_state.last_move = {:index => y, :token => current_player}
           next_game_state.own_token = own_token
 
