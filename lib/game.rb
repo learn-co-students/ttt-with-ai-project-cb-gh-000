@@ -1,5 +1,5 @@
 class Game
-  attr_accessor :board, :player_1, :player_2
+
   WIN_COMBINATIONS = [
     [0,1,2],
     [3,4,5],
@@ -11,61 +11,57 @@ class Game
     [6,4,2]
   ]
 
+  attr_accessor :board, :player_1, :player_2
+
   def initialize(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)
-    @board = board
     @player_1 = player_1
     @player_2 = player_2
-  end
-
-  def over?
-    won? || draw?
+    @board = board
   end
 
   def current_player
-    @board.turn_count % 2 == 0 ? @player_1 : @player_2
+    @board.cells.count(@player_1.token) == @board.cells.count(@player_2.token) ? @player_1 : @player_2
+  end
+
+  def over?
+    self.draw? || self.won?
+  end
+
+  def won?
+    !!self.winner
+  end
+
+  def draw?
+    self.board.full? && !self.won?
   end
 
   def winner
-    if winning_combo = won?
-      @winner = @board.cells[winning_combo.first]
+    return self.player_1.token if Game::WIN_COMBINATIONS.any? do |combination|
+      combination.all?{ |cell| self.board.cells[cell] == self.player_1.token }
+    end
+    return self.player_2.token if Game::WIN_COMBINATIONS.any? do |combination|
+      combination.all?{ |cell| self.board.cells[cell] == self.player_2.token }
     end
   end
 
   def turn
-    player = current_player
-    current_move = player.move(@board)
-    if !@board.valid_move?(current_move)
-      turn
-    else
-      puts "Turn: #{@board.turn_count+1}\n"
-      @board.display
-      @board.update(current_move, player)
-      puts "#{player.token} moved #{current_move}"
-      @board.display
-      puts "\n\n"
+    move = nil
+    until self.board.valid_move?(move)
+      move = self.current_player.move(self.board)
     end
+    self.board.update(move, self.current_player)
+    self.board.display
   end
 
   def play
-    while !over?
-      turn
+    until self.over?
+      self.turn
     end
-    if won?
-      puts "Congratulations #{winner}!"
-    elsif draw?
+    if self.won?
+      puts "Congratulations #{self.winner}!"
+    else
       puts "Cat's Game!"
     end
   end
 
-  def won?
-    WIN_COMBINATIONS.detect do |combo|
-      @board.cells[combo[0]] == @board.cells[combo[1]] &&
-      @board.cells[combo[1]] == @board.cells[combo[2]] &&
-      @board.taken?(combo[0]+1)
-    end
-  end
-
-  def draw?
-    @board.full? && !won?
-  end
 end

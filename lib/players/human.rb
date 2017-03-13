@@ -1,9 +1,10 @@
 module Players
-  class Human < Player
+	class Human < Player
 
-    def move(board)
-      puts "Please enter 1-9:"
-      gets.strip
-    end
-  end
+	  def move(board)
+	    puts "What cell do you want to play (1-9) ?"
+	    gets.strip
+	  end
+
+	end
 end
