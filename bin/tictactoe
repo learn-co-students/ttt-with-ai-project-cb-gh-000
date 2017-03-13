@@ -2,70 +2,19 @@
 
 require_relative '../config/environment'
 
-game = Game.new()
+puts "Welcome to Tic Tac Toe!"
+game = Game.new
+until game.won?
+  game.play
+end
 
-loop do
-  100.times{ puts "" }
-  puts "Game type:"
-  puts "1. Player vs Player"
-  puts "2. Player vs Ai"
-  puts "3. AI vs AI"
-  puts "4. wargames - AI vs AI x100"
-  puts "Anything else to quit"
-
-  input = gets.chomp.to_i
-  100.times{ puts "" }
-  case input
-    when 1
-      # Player vs Player
-      game.play
-      puts "Returning to Menu"
-      next
-    when 2
-      # Player vs AI
-      puts "Who is first(X)?"
-      puts "1. Player"
-      puts "2. AI"
-      puts "Anything else to go back"
-      input = gets.chomp.to_i
-      case input
-        when 1
-          # Player first
-          game.start(Players::Human.new("X"), Players::Computer.new("O"))
-          puts "Press enter to return to menu"
-          gets
-          next
-        when 2
-          # AI first
-          game.start(Players::Computer.new("X"), Players::Human.new("O"))
-          puts "Press enter to return to menu"
-          gets
-          next
-        else
-          next # Back to main
-      end
-    when 3
-      # AI vs AI
-      game.start(Players::Computer.new("X"), Players::Computer.new("O"))
-      puts "Press enter to return to menu"
-      gets
-      next
-    when 4
-      # Wargames
-      puts "WARNING: Wargames takes a considerable amount of time."
-      puts "Are you sure you want to continue? Y for yes. Anything else for no."
-      input = gets.chomp.upcase
-      if input.eql?("Y")
-        game.play_wargames
-        puts "Press enter to return to menu"
-        gets
-        next
-      elsif input.eql?("N")
-        next
-      else
-        next
-      end
-    else
-      break
+play_again = ""
+until play_again.downcase == "n" || play_again.downcase == "no"
+  puts "Would you like to play again?"
+  play_again = gets.strip
+  play_again.downcase == "y" || play_again.downcase == "yes"
+  game = Game.new
+  until game.won?
+    game.play
   end
 end
