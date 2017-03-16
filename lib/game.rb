@@ -1,0 +1,65 @@
+class Game
+  attr_accessor :board, :player_1, :player_2
+
+  WIN_COMBINATIONS = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [6,4,2]
+  ]
+
+  def initialize(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)
+    @player_1 = player_1
+    @player_2 = player_2
+    @board = board
+  end
+
+  def current_player
+    @board.cells.count(@player_1.token) == @board.cells.count(@player_2.token) ? @player_1 : @player_2
+  end
+
+  def draw?
+    self.board.full? && !self.won?
+  end
+
+  def over?
+    self.draw? || self.won?
+  end
+
+  def play
+    until self.over?
+      self.turn
+    end
+    if self.won?
+      puts "Congratulations #{self.winner}!"
+    else
+      puts "Cat's Game!"
+    end
+  end
+
+  def turn
+    move = nil
+    until self.board.valid_move?(move)
+      move = self.current_player.move(self.board)
+    end
+    self.board.update(move, self.current_player)
+    self.board.display
+  end
+
+  def winner
+    return self.player_1.token if Game::WIN_COMBINATIONS.any? do |combination|
+      combination.all?{ |cell| self.board.cells[cell] == self.player_1.token }
+    end
+    return self.player_2.token if Game::WIN_COMBINATIONS.any? do |combination|
+      combination.all?{ |cell| self.board.cells[cell] == self.player_2.token }
+    end
+  end
+
+  def won?
+    !!self.winner
+  end  
+end
