@@ -11,8 +11,8 @@ class Game
   ]
 
   def initialize(player_1 = nil, player_2 = nil, board = nil)
-    @player_1 = player_1 || Players::Human.new("X")
-    @player_2 = player_2 || Players::Human.new("O")
+    @player_1 = player_1 || Players::Human.new('X')
+    @player_2 = player_2 || Players::Human.new('O')
     @board = board || Board.new
   end
 
@@ -43,10 +43,14 @@ class Game
   end
 
   def turn
-    puts 'Please type a position from 1 to 9.'
-    position = current_player.move(@board)
+    current_player = self.current_player
 
+    puts "#{current_player.token}: please type a position from 1 to 9." if current_player.class == Players::Human
+
+    position = current_player.move(@board)
     return turn unless @board.valid_move?(position)
+
+    puts "Move for #{current_player.token}:" if current_player.class == Players::Computer
 
     @board.update(position, current_player)
     @board.display
@@ -54,7 +58,44 @@ class Game
 
   def play
     turn until over?
-    puts draw? ? "Cat's Game!" : "Congratulations #{ winner }!"
+    puts draw? ? 'Cat\'s Game!' : "Congratulations #{ winner }!"
+  end
+
+
+  def self.welcome
+    puts 'WELCOME TO DAN-TAC-TOE'
+    puts '----------------------'
+  end
+
+  def self.game_mode
+    puts 'Select game mode:'
+    puts '0. CPU vs CPU'
+    puts '1. PLAYER vs. CPU'
+    puts '2. PLAYER vs. PLAYER'
+    gets.chomp
+  end
+
+  def self.ask_first
+    puts 'Which user should go first?'
+    puts 'Type X or O'
+    input = gets.chomp
+    input != '' ? input : 'X'
+  end
+
+  def self.start
+    welcome
+    case game_mode
+      when '1'
+        Game.new(Players::Human.new('X'), Players::Computer.new('O')).play
+      when '2'
+        first = Players::Human.new(ask_first)
+        second = Players::Human.new(first.token == 'X' ? 'O' : 'X')
+        Game.new(first, second).play
+      when 'wargames'
+        Wargame.new.play
+      else
+        Game.new(Players::Computer.new('X'), Players::Computer.new('O')).play
+    end
   end
 
 end
