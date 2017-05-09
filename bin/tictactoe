@@ -3,3 +3,23 @@
 require_relative '../config/environment'
 
 Game.start
+
+#
+# board = Board.new
+# board.cells = ["O", " ", " ", " ", "X", " ", " ", " ", "X"]
+#
+# player = Players::Computer.new('X')
+# player.win_combinations = [
+#     [0,1,2],[3,4,5],[6,7,8],
+#     [0,3,6],[1,4,7],
+#     [2,5,8],[0,4,8],[6,4,2]
+# ]
+#
+# score = player.calculate_score(board, 'X')
+# puts score.inspect
+#
+# strategy = player.pick_best_strategy(board, 'X')
+# puts strategy
+#
+# position = player.pick_position(board, strategy[:combination])
+# puts position

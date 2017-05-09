@@ -3,8 +3,9 @@ class Wargame < Game
   @@winners = []
 
   def initialize
-    @player_1 = Players::Computer.new('X')
-    @player_2 = Players::Computer.new('O')
+    @player_1 = Players::Computer.new('X', WIN_COMBINATIONS)
+    @player_2 = Players::Computer.new('O', WIN_COMBINATIONS)
+
     @board = Board.new
   end
 

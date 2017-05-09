@@ -91,6 +91,21 @@ describe "Board" do
     end
   end
 
+  describe '#positions_taken?' do
+    it 'returns true if the position is X or O' do
+      board.cells = ["X", " ", " ", " ", " ", " ", " ", " ", "O"]
+
+      expect(board.positions_taken?([0, 8], true)).to be(true)
+      # expect(board.taken?(["9"])).to be(true)
+    end
+
+    it 'returns false if the position is empty or blank' do
+      board.cells = ["X", " ", " ", " ", " ", " ", " ", " ", "O"]
+
+      expect(board.positions_taken?([1, 8], true)).to be(false)
+    end
+  end
+
   describe '#taken?' do
     it 'returns true if the position is X or O' do
       board.cells = ["X", " ", " ", " ", " ", " ", " ", " ", "O"]

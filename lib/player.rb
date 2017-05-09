@@ -6,4 +6,8 @@ class Player
     @token = token
   end
 
+  def other_player_token
+    @token == 'X' ? 'O' : 'X'
+  end
+
 end

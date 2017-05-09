@@ -13,6 +13,10 @@ class Game
   def initialize(player_1 = nil, player_2 = nil, board = nil)
     @player_1 = player_1 || Players::Human.new('X')
     @player_2 = player_2 || Players::Human.new('O')
+
+    @player_1.win_combinations = WIN_COMBINATIONS if player_1.class == Players::Computer
+    @player_2.win_combinations = WIN_COMBINATIONS if player_2.class == Players::Computer
+
     @board = board || Board.new
   end
 
@@ -45,12 +49,8 @@ class Game
   def turn
     current_player = self.current_player
 
-    puts "#{current_player.token}: please type a position from 1 to 9." if current_player.class == Players::Human
-
     position = current_player.move(@board)
     return turn unless @board.valid_move?(position)
-
-    puts "Move for #{current_player.token}:" if current_player.class == Players::Computer
 
     @board.update(position, current_player)
     @board.display
@@ -85,17 +85,33 @@ class Game
   def self.start
     welcome
     case game_mode
-      when '1'
-        Game.new(Players::Human.new('X'), Players::Computer.new('O')).play
-      when '2'
-        first = Players::Human.new(ask_first)
-        second = Players::Human.new(first.token == 'X' ? 'O' : 'X')
-        Game.new(first, second).play
-      when 'wargames'
-        Wargame.new.play
-      else
-        Game.new(Players::Computer.new('X'), Players::Computer.new('O')).play
+    when '1'
+      start_single_player
+    when '2'
+      start_two_player
+    when 'wargames'
+      start_wargames
+    else
+      start_cpu_game
     end
+  end
+
+  def self.start_single_player
+    Game.new(Players::Human.new('X'), Players::Computer.new('O')).play
+  end
+
+  def self.start_two_player
+    first = Players::Human.new(ask_first)
+    second = Players::Human.new(first.other_player_token)
+    Game.new(first, second).play
+  end
+
+  def self.start_cpu_game
+    Game.new(Players::Computer.new('X'), Players::Computer.new('O')).play
+  end
+
+  def self.start_wargames
+    Wargame.new.play
   end
 
 end

@@ -18,12 +18,12 @@ class Board
     puts " #{ @cells[6] } | #{ @cells[7] } | #{ @cells[8] } "
   end
 
-  def input_to_index(input)
-    input.to_i - 1
+  def input_to_index(input, is_index = false)
+    is_index ? input : input.to_i - 1
   end
 
-  def position(input)
-    @cells[input_to_index(input)]
+  def position(input, is_index = false)
+    @cells[input_to_index(input, is_index)]
   end
 
   def full?
@@ -34,14 +34,22 @@ class Board
     @cells.select { |cell| cell != ' ' }.size
   end
 
-  def taken?(position)
-    @cells[input_to_index(position)] != ' '
+  def positions_taken? (positions, is_index = false)
+    !positions.detect { |position| available?(position, is_index) }
   end
 
-  def valid_move?(position)
-    index = input_to_index(position)
+  def available?(position, is_index = false)
+    !taken?(position, is_index)
+  end
+
+  def taken?(position, is_index = false)
+    @cells[input_to_index(position, is_index)] != ' '
+  end
+
+  def valid_move?(position, is_index = false)
+    index = input_to_index(position, is_index)
     return false if index < 0 || index > 8
-    return false if taken?(position)
+    return false if taken?(position, is_index)
     true
   end
 
