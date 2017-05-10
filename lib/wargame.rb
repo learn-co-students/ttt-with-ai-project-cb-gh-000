@@ -3,8 +3,11 @@ class Wargame < Game
   @@winners = []
 
   def initialize
-    @player_1 = Players::Computer.new('X', WIN_COMBINATIONS)
-    @player_2 = Players::Computer.new('O', WIN_COMBINATIONS)
+    @player_1 = Players::Computer.new('X')
+    @player_2 = Players::Computer.new('O')
+
+    @player_1.win_combinations = WIN_COMBINATIONS
+    @player_2.win_combinations = WIN_COMBINATIONS
 
     @board = Board.new
   end
@@ -25,7 +28,7 @@ class Wargame < Game
     @@winners.each do |winner|
       if winner == 'X'
         x_won += 1
-      else
+      elsif winner == 'O'
         o_won += 1
       end
     end

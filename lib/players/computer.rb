@@ -24,9 +24,18 @@ module Players
         if board.positions_taken?(combination, true)
           score = 0
         else
-          score = combination.count do |position|
-            board.position(position, true) == token
+          score = 0
+          combination.each do |position|
+            case board.position(position, true)
+              when token
+                score += 1
+              when other_player_token
+                score -= 1
+            end
           end
+          # score = combination.count do |position|
+          #   board.position(position, true) == token
+          # end
         end
         { score: score, combination: combination }
       end
