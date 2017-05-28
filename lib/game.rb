@@ -40,20 +40,25 @@ class Game
   end
 
   def turn
+    self.board.display
+    puts "Please enter 1-9, player #{self.current_player.token}"
+
     input = self.current_player.move(self.board)
     if self.board.valid_move?(input)
       self.board.update(input, self.current_player)
-      self.board.display
     else
+      puts 'Invalid Input or spot taken! Enter again!'
       self.turn
     end
+
   end
 
   def play
+
     until self.over?
       self.turn
     end
-
+    self.board.display
     if winner
       puts "Congratulations #{winner}!"
     elsif draw?
