@@ -15,9 +15,7 @@ class TicTacToe
       self.user_input = gets.strip
       case self.user_input
         when '0'
-          100.times do
           ai_vs_ai
-          end
         when '1'
           player_vs_ai
         when '2'
@@ -55,23 +53,11 @@ class TicTacToe
       choice[0] = gets.strip
     end
 
-    puts 'Do you want to take first turn? (Y/N)'
-    choice[1] = gets.strip
-    until %w(Y y N n).include?(choice[1])
-      puts 'Invalid Input!'
-      puts 'Do you want to take first turn? (Y/N)'
-      choice[1] = gets.strip
-    end
-
     player2_token = choice[0].upcase == 'X' ? 'O' : 'X'
 
-    if choice[1].upcase == 'Y'
       player_1 = Players::Human.new(choice[0].upcase)
       player_2 = Players::Computer.new(player2_token)
-    else
-      player_1 = Players::Computer.new(player2_token)
-      player_2 = Players::Human.new(choice[0].upcase)
-    end
+
 
     Game.new(player_1, player_2).play
 
