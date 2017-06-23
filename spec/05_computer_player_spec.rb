@@ -1,5 +1,6 @@
 require 'spec_helper'
-
+__END__
+SKIP
 describe 'Players::Computer' do
   it 'inherits from Player' do
     expect(Players::Computer.ancestors).to include(Player)
