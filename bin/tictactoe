@@ -1,64 +1,22 @@
-#!/usr/bin/env ruby
 
 require_relative '../config/environment'
 
-game = Game.new()
+puts "Welcome to Tic Tac Toe!"
+puts "How many human players?"
 
-loop do
-  100.times{ puts "" }
-  puts "Game type:"
-  puts "1. Player vs Player"
-  puts "2. Player vs Ai"
-  puts "3. AI vs AI"
-  puts "4. wargames - AI vs AI x100"
-  puts "quit"
-
-  input = gets.chomp.to_i
-  100.times{ puts "" }
-  case input
-    when 1
-      game.play
-      puts "Returning to Menu"
-      next
-    when 2
-      puts "Who is first(X)?"
-      puts "1. Player"
-      puts "2. AI"
-      puts "go back"
-      input = gets.chomp.to_i
-      case input
-        when 1
-          game.start(Players::Human.new("X"), Players::Computer.new("O"))
-          puts "Press enter to return to menu"
-          gets
-          next
-        when 2
-          game.start(Players::Computer.new("X"), Players::Human.new("O"))
-          puts "Press enter to return to menu"
-          gets
-          next
-        else
-          next
-      end
-    when 3
-      game.start(Players::Computer.new("X"), Players::Computer.new("O"))
-      puts "Press enter to return to menu"
-      gets
-      next
-    when 4
-      puts "Are you sure you want to continue?, press Y for yes or N for no."
-      input = gets.chomp.upcase
-      if input.eql?("Y")
-        game.play_wargames
-        puts "Press enter to return to menu"
-        gets
-        next
-      elsif input.eql?("N")
-        next
-      else
-        next
-      end
-    else
-      break
+input = ""
+while input != "exit"
+  input = gets.strip
+  if input == "0"
+    game = Game.new(Players::Computer.new("X"),  Players::Computer.new("O"))
+    game.play
+  elsif input == "1"
+    game = Game.new(Players::Human.new("X"), Players::Computer.new("O"))
+    game.play
+  elsif input == "2"
+    game = Game.new
+    game.play
+  else
+    puts "Invalid input"
   end
 end

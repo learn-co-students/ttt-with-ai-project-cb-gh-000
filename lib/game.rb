@@ -1,96 +1,99 @@
 class Game
+  WIN_COMBINATIONS = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
 
-  WIN_COMBINATIONS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[6,4,2]]
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
 
-  attr_accessor :board, :player_1, :player_2
+    [0, 4, 8],
+    [2, 4, 6]
+  ]
 
-  def initialize(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)
+  attr_accessor :player_1, :player_2, :board
+
+  def initialize(player_1 = Players::Human.new("X"),
+                 player_2 =  Players::Human.new("O"), board = Board.new)
+
     @player_1 = player_1
     @player_2 = player_2
     @board = board
-    @winner = nil
+  end
+
+  def board
+    @board
+  end
+
+  def player_1
+    @player_1
+  end
+
+  def player_2
+    @player_2
   end
 
   def current_player
-    token = board.turn_count.even? ? "X" : "O"
-    token.eql?(@player_1.token) ? @player_1 : @player_2
-  end
-
-  def won?
-    WIN_COMBINATIONS.any?{|combo|
-      @board.cells[combo[0]].eql?(@board.cells[combo[1]]) &&
-      @board.cells[combo[1]].eql?(@board.cells[combo[2]]) &&
-      !@board.cells[combo[0]].eql?(" ")
-    }
+    (board.turn_count % 2 == 0) ? player_1 : player_2
   end
 
   def over?
-    won? || draw?
+    draw? or won?
+  end
+
+  def won?
+    WIN_COMBINATIONS.detect do |combo|
+      (combo.all? {|e| board.cells[e] == "X"} ||
+       combo.all? {|e| board.cells[e] =="O"}) ? true : false
+    end
   end
 
   def draw?
-    @board.full? && winner.nil?
+    board.full? and !won?
   end
 
   def winner
-    WIN_COMBINATIONS.collect{|combo|
-      (@board.cells[combo[0]].eql?(@board.cells[combo[1]]) &&
-       @board.cells[combo[1]].eql?(@board.cells[combo[2]]) &&
-       !@board.cells[combo[0]].eql?(" ")) ? @board.cells[combo[0]] : nil
-    }.compact.first
+    WIN_COMBINATIONS.detect do |combo|
+      if combo.all? {|i| board.cells[i] == "X"}
+        return "X"
+      elsif combo.all? {|i| board.cells[i] == "O"}
+        return "O"
+      end
+    end
   end
 
-  def turn(wargames = nil)
-    loop do
-      puts "#{current_player.token} turn:" if wargames.nil?
-      move = current_player.move(@board.cells)
-      @board.update(move, current_player) ? break : next
+  def turn
+    puts
+    puts "_________________________________________"
+    puts "Enter a number (1-9) where you want to go"
+
+    input = current_player.move(board)
+    if board.valid_move?(input)
+      if current_player.class == Players::Human
+        puts "You picked spot #{input}"
+      else
+        puts "Computer picked spot #{input}"
+      end
+      board.update(input, current_player)
+      board.display
+    else
+      puts "Invalid move received"
+      turn
     end
   end
 
   def play
-    while (!over?) do
-      turn(nil)
-      3.times{puts ""}
-      @board.display
-      draw? ? break : next
+    puts
+    board.display
+    until over?
+      turn
     end
-    draw? ? (puts "Cat's Game!") : (puts "Congratulations #{winner}!")
-    3.times{puts ""}
-  end
-
-  def wargames
-    results = []
-    100.times do
-      while (!over?) do
-        turn(true)
-        draw? ? break : next
-      end
-      draw? ? results << "Draw" : results << "#{winner}"
-      puts "Game #{results.size} over. Starting next game." if results.size < 100
-      puts "Game 100 over. Results are #{wargames_results(results)}" if results.size.eql?(100)
+    if won?
+      puts "Congratulations #{winner}!"
+    elsif draw?
+      puts "Cat's Game!"
     end
-  end
-
-  def wargames_results(results)
-    draws = results.collect{|e| e.eql?("Draw") ? 1 : nil}.compact.size
-    x_wins = results.collect{|e| e.eql?("X") ? 1 : nil}.compact.size
-    o_wins = results.collect{|e| e.eql?("O") ? 1 : nil}.compact.size
-    "Draws: #{draws}, Wins: X: #{x_wins}, O: #{o_wins}"
-  end
-
-  def play_wargames
-    @player_1 = Players::Computer.new("X")
-    @player_2 = Players::Computer.new("O")
-    @board = Board.new
-    wargames
-  end
-
-  def start(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)
-    @player_1 = player_1
-    @player_2 = player_2
-    @board = board
-    play
   end
 
 end
