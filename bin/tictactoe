@@ -1,3 +1,38 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+input = "-1"
+
+while input != "0"
+  puts "Welcome to Tic Tac Toe!"
+  puts "  1. Play vs Friend"
+  puts "  2. Play vs Computer"
+  puts "  3. Computer vs Computer"
+  puts "  0. Exit"
+  print "Please select mode:"
+  input = gets.strip
+  case input
+  when "1"
+    Game.new.play
+  when "2"
+    puts "  1. Offensive"
+    puts "  2. Defensive"
+    print "Please select position:"
+    position = gets.strip
+    case position
+    when "1"
+      Game.new(Players::Human.new("O"), Players::Computer.new("X")).play
+    when "2"
+      Game.new(Players::Computer.new("O"), Players::Human.new("X")).play
+    else
+      puts "Input error, start over."
+    end
+  when "3"
+    Game.new(Players::Computer.new("O"), Players::Computer.new("X")).play
+  when "0"
+    puts "Goodbye!"
+  else
+    puts "Input error, start over."
+  end
+end
