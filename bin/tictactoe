@@ -1,3 +1,64 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+require 'pry'
+
+def get_gamemode
+  print "Gamemode (h for help) >>> "
+  input = gets.chomp
+
+  case input
+  when "0"
+    play_wargame
+  when "1"
+    play_pve
+  when "2"
+    play_pvp
+  when "exit"
+    return
+  when "h"
+    puts "0 - Wargames: 100 Games of AI vs AI"
+    puts "1 - Classic: Player vs AI"
+    puts "2 - Multiplayer: Player vs Player"
+    puts "exit - Exit the CLI"
+    return get_gamemode
+  else
+    return get_gamemode
+  end
+end
+
+def play_wargame
+  results = []
+  ai1 = Players::Computer.new("X")
+  ai2 = Players::Computer.new("O")
+  board = Board.new
+  for i in 1..100
+    board.reset!
+    game = Game.new(ai1, ai2, board)
+    # binding.pry
+    results << game.play
+  end
+
+  puts "X wins: #{results.count("X")}"
+  puts "O wins: #{results.count("O")}"
+  puts "Draws: #{results.count(nil)}"
+
+end
+
+def play_pve
+  p1 = Players::Human.new("X")
+  p2 = Players::SmartAI.new("O")
+  board = Board.new
+  game = Game.new(p1, p2, board)
+  game.play
+end
+
+def play_pvp
+  p1 = Players::Human.new("X")
+  p2 = Players::Human.new("O")
+  board = Board.new
+  game = Game.new(p1, p2, board)
+  game.play
+end
+
+get_gamemode
