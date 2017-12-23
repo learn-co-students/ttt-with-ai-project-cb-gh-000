@@ -18,7 +18,7 @@ class Game
   end
 
   def over?
-    won? || draw?
+    @board.full? || draw?
   end
 
   def current_player
@@ -58,10 +58,13 @@ class Game
   end
 
   def won?
-    WIN_COMBINATIONS.detect do |combo|
+    combo = WIN_COMBINATIONS.detect do |combo|
       @board.cells[combo[0]] == @board.cells[combo[1]] &&
       @board.cells[combo[1]] == @board.cells[combo[2]] &&
-      @board.taken?(combo[0]+1)
+      @board.taken?((combo[0]+1).to_s)
+    end
+    if combo==nil
+      return false
     end
   end
 
