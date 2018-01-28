@@ -1,3 +1,10 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+       game = Game.new
+      game.board.cells = ["X", " ", " ", " ", "X", " ", " ", " ", "X"]
+
+      puts game.winner
+      
+      # ruby bin/tictactoe
