@@ -2,9 +2,27 @@
 
 require_relative '../config/environment'
 
-       game = Game.new
-      game.board.cells = ["X", " ", " ", " ", "X", " ", " ", " ", "X"]
-
-      puts game.winner
-      
-      # ruby bin/tictactoe
+def play_tictactoe
+  puts "Welcome to Tic Tac Toe!"
+  puts "Select which game you want to play"
+  puts "Enter 0 for no human players"
+  puts "Enter 1 for one human player"
+  puts "Enter 2 for two human players"
+  puts "Enter 'exit' if you wnna exit"
+  user_input = ""
+  while user_input != "exit" do
+    user_input = gets.strip
+    case user_input
+    when "0"
+      Game.new(player_1 = Players::Computer.new("X"), player_2 = Players::Computer.new("O"), board = Board.new).play
+    when "1"
+      Game.new(player_1 = Players::Human.new("X"), player_2 = Players::Computer.new("O"), board = Board.new).play
+    when "2"
+       Game.new.play
+     else
+        puts "please input 0-2"
+    end
+  end
+end
+play_tictactoe
+# ruby bin/tictactoe

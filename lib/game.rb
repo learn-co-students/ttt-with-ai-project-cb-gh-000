@@ -1,4 +1,3 @@
-
 class Game 
   
   attr_accessor :board, :player_1, :player_2
@@ -74,13 +73,4 @@ class Game
   end
   
 end
-
-
-
-
-# learn spec/04_game_spec.rb --fail-fast
-
-
-
-
 
