@@ -53,10 +53,11 @@ class Game
   end
 
   def turn
+    puts "#{current_player.name}\'s turn:"
     pos = current_player.move(@board)
 
     if @board.valid_move?(pos)
-      puts "#{current_player.name}\'s turn: #{current_player.name} moves #{pos}."
+      puts "#{current_player.name} moves #{pos}."
       @board.update(pos, current_player)
       puts ""
       @board.display
