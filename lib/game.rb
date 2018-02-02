@@ -44,29 +44,52 @@ class Game
     won? ? @board.cells[won?[0]] : nil
   end
 
-  def turn
-    puts "Please enter 1-9:"
+  def loser
+    if winner
+      @player_1.token == winner ? @player_2 : @player_1
+    else
+      nil
+    end
+  end
 
+  def turn
     pos = current_player.move(@board)
 
     if @board.valid_move?(pos)
+      puts "#{current_player.name}\'s turn: #{current_player.name} moves #{pos}."
       @board.update(pos, current_player)
+      puts ""
+      @board.display
+      puts ""
     else
       turn
     end
   end
 
   def play
+    prefix_1 = @player_1.class == Players::Computer ? "Robot " : ""
+    prefix_2 = @player_2.class == Players::Computer ? "Robot " : ""
+    3.times { puts "" }
+    puts "#{prefix_1}#{@player_1.name} vs #{prefix_2}#{@player_2.name}, Start!"
+    puts ""
+    @board.display
+    puts ""
+
     until over?
       turn
     end
 
     if won?
+      3.times { puts "" }
       puts "Congratulations #{winner}!"
+      puts ""
+      puts "#{@player_1.token == winner ? @player_1.name : @player_2.name} defeats #{loser.name} in the end."
+      return "over"
     end
 
     if draw?
       puts "Cat's Game!"
+      return "over"
     end
   end
 
