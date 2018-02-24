@@ -2,7 +2,7 @@ class Board
   attr_accessor :cells
 
   def initialize()
-    @cells = Array.new(9, " ")
+    reset!
   end
 
   def reset!
@@ -10,34 +10,34 @@ class Board
   end
 
   def display
-    puts " #{cells[0]} " + "|" + " #{cells[1]} " + "|" + " #{cells[2]} "
+    puts " #{cells[0]} | #{cells[1]} | #{cells[2]} "
     puts "-----------"
-    puts " #{cells[3]} " + "|" + " #{cells[4]} " + "|" + " #{cells[5]} "
+    puts " #{cells[3]} | #{cells[4]} | #{cells[5]} "
     puts "-----------"
-    puts " #{cells[6]} " + "|" + " #{cells[7]} " + "|" + " #{cells[8]} "
-  end
-
-  def position(idx)
-    cells[idx.to_i - 1]
+    puts " #{cells[6]} | #{cells[7]} | #{cells[8]} "
   end
 
   def full?
-    !cells.include?(" ")
+    cells.all?{|token| token == "X" || token == "O"}
   end
 
   def turn_count
-    cells.count { |c| c if c != " " }
+    cells.count{|token| token == "X" || token == "O"}
   end
 
-  def taken?(idx)
-    cells[idx.to_i - 1] == " " ? false : true
+  def valid_move?(input)
+    input.to_i.between?(1,9) && !taken?(input)
   end
 
-  def valid_move?(idx)
-    !taken?(idx) && idx.to_i.between?(1,9)
+  def update(input, player)
+    cells[input.to_i-1] = player.token
   end
 
-  def update(idx, player)
-    cells[idx.to_i - 1] = player.token
+  def position(input)
+    cells[input.to_i-1]
+  end
+
+  def taken?(input)
+    !(position(input) == " " || position(input) == "")
   end
 end
