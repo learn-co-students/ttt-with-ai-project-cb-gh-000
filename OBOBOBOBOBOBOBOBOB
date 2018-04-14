@@ -1,0 +1,15 @@
+
+[1mFrom:[0m /home/vasilas/Music/ttt-with-ai-project-cb-gh-000/lib/players/computer.rb @ line 39 Players::Computer#minimax:
+
+    [1;34m34[0m:         [1;34m# board.cells[free] = cell_backup[0m
+    [1;34m35[0m: 
+    [1;34m36[0m: 
+    [1;34m37[0m:       [32mend[0m
+    [1;34m38[0m:       puts [31m[1;31m'[0m[31m8888888888888888888888888888888888888888888888888888888[1;31m'[0m[31m[0m
+ => [1;34m39[0m:       binding.pry
+    [1;34m40[0m:       [32mif[0m player_in_depth(depth) == [31m[1;31m'[0m[31mX[1;31m'[0m[31m[0m
+    [1;34m41[0m:         max_score_index = scores.each_with_index.max[[1;34m1[0m]
+    [1;34m42[0m:         @choice = moves[max_score_index]
+    [1;34m43[0m:         [32mreturn[0m scores[max_score_index]
+    [1;34m44[0m:       [32melse[0m
+
