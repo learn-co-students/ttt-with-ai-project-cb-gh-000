@@ -1,3 +1,126 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+def over(game, signal)
+  if signal == "over"
+    puts ""
+    puts "Game is over. What do you want to do next:"
+    puts "- 0: Quit game"
+    puts "- 1: Play again."
+    puts "- 2: Start a new game"
+    choice = gets.strip
+
+    until choice == "0" || choice == "1" || choice == "2"
+      choice = gets.strip
+      puts ""
+    end
+
+    if choice == "0"
+      puts ""
+      puts "See you again :)"
+      exit
+    elsif choice == "1"
+      game.board = Board.new
+      over(game, game.play)
+    else
+      3.times { puts "" }
+      start
+    end
+  end
+end
+
+def init(kind)
+  name_1 = ""
+  name_2 = ""
+
+  if kind == "1"
+    puts "Please enter your name:"
+    name_1 = gets.strip
+    name_2 = "Mr. Robot"
+    puts ""
+  else
+    puts "Please enter the name for player 1:"
+    name_1 = gets.strip
+    puts "Please enter the name for player 2:"
+    name_2 = gets.strip
+    puts ""
+  end
+
+  puts "Who should go first?"
+  puts "- 1: #{name_1}"
+  puts "- 2: #{name_2}"
+  who = gets.strip
+  puts ""
+
+  token_1 = ""
+  token_2 = ""
+  until who == "1" || who == "2"
+    who = gets.strip
+    puts ""
+  end
+
+  if who == "1"
+    token_1 = "X"
+    token_2 = "O"
+  else
+    token_1 = "O"
+    token_2 = "X"
+  end
+
+  puts "So #{name_1} is #{token_1}, #{name_2} is #{token_2}. Have fun :)"
+
+  case kind
+  when "0"
+    player_1 = Players::Computer.new(token_1, name_1)
+    player_2 = Players::Computer.new(token_2, name_2)
+
+    if who == "1"
+      game = Game.new(player_1, player_2)
+    else
+      game = Game.new(player_2, player_1)
+    end
+
+    over(game, game.play)
+  when "1"
+    player_1 = Players::Human.new(token_1, name_1)
+    player_2 = Players::Computer.new(token_2, name_2)
+
+    if who == "1"
+      game = Game.new(player_1, player_2)
+    else
+      game = Game.new(player_2, player_1)
+    end
+
+    over(game, game.play)
+  when "2"
+    player_1 = Players::Human.new(token_1, name_1)
+    player_2 = Players::Human.new(token_2, name_2)
+
+    if who == "1"
+      game = Game.new(player_1, player_2)
+    else
+      game = Game.new(player_2, player_1)
+    end
+
+    over(game, game.play)
+  else
+    puts "Please enter a valid kind again:"
+    kind = gets.strip
+  end
+end
+
+def start
+  puts "Welcome to Tic-Tac-Toe with AI"
+  puts "What kind of game do you want to play?"
+  puts "- 0: A 0-player game has two computer players playing against each other with no interaction from the user."
+  puts "- 1: A 1-player game has a human playing against a computer."
+  puts "- 2: A 2-player game has two human players."
+
+  kind = gets.strip
+  puts ""
+
+  init(kind)
+end
+
+start
