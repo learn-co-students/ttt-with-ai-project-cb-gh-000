@@ -1,3 +1,48 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+def start(game, input)
+  again = "x"
+  until again == "n" || again == "no"
+    game.play
+    puts "Play again? y/n"
+    again = gets.strip.downcase
+    until again == "y" ||again == "yes"|| again == "no"|| again == "n"
+      puts "Try Again. Do you want to play again? y/n "
+      again = gets.strip.downcase
+    end
+    if again == "y" || again == "yes"
+
+      game.board.reset!
+    end
+  end
+end
+
+puts "Welcome to Tic Tac Toe!"
+puts "How many players?(0,1,2)"
+input = gets.strip
+until input == "0" || input == "1" || input == "2"
+  puts "Try Again. How many players?(0,1,2) "
+  input = gets.strip
+end
+
+
+if input == "0" #BOT VS BOT
+  start(Game.new(Players::Computer.new("X"), Players::Computer.new("O")),input)
+elsif input == "1"#{HUMAN VS BOT}
+  botFirst = "x"
+  puts "Do you want the bot to go first? y/n"
+  botFirst = gets.strip.downcase
+  until botFirst == "y" ||botFirst == "yes"|| botFirst == "no"|| botFirst == "n"
+    puts "Try Again. Do you want the bot to go first? y/n "
+    botFirst = gets.strip.downcase
+  end
+  if botFirst == "y" || botFirst == "yes"
+    start(Game.new(Players::Computer.new("X")),input)
+  elsif botFirst == "n" || botFirst == "no"
+    start(Game.new(Players::Human.new("X"), Players::Computer.new("O")),input)
+  end
+elsif input == "2"#HUMAN VS HUMAN
+  start(Game.new(),input)
+end
