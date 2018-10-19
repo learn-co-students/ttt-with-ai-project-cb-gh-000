@@ -1,5 +1,18 @@
 require 'spec_helper'
 
+describe "Woop" do
+  let(:de){true}
+
+  describe '#Scoop' do
+    it 'do' do
+      expect(de).to be true
+    end
+  end
+end
+
+=begin
+require 'spec_helper'
+
 describe 'Players::Computer' do
   it 'inherits from Player' do
     expect(Players::Computer.ancestors).to include(Player)
@@ -18,3 +31,4 @@ describe 'Players::Computer' do
     end
   end
 end
+=end
