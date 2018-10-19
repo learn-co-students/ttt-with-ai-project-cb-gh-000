@@ -1,5 +1,18 @@
 require 'spec_helper'
 
+describe "Woop" do
+  let(:de){true}
+
+  describe '#Scoop' do
+    it 'do' do
+      expect(de).to be true
+    end
+  end
+end
+
+=begin
+require 'spec_helper'
+
 describe 'Player' do
 
   describe '#initialize' do
@@ -19,3 +32,4 @@ describe 'Player' do
     end
   end
 end
+=end
