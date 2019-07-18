@@ -72,7 +72,6 @@ class Game
     user_input = player.move(self.board)
     if self.board.valid_move?(user_input)
       self.board.update(user_input, player)
-      self.board.display
     else
       puts "Invalid move"
       turn
@@ -85,8 +84,10 @@ class Game
       self.turn
     end
     if self.won?
+      self.board.display
       puts "Congratulations #{self.winner}!"
     elsif self.draw?
+      self.board.display
       puts "Cat's Game!"
     end
   end
