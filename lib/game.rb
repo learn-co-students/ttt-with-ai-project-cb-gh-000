@@ -20,6 +20,11 @@ class Game
     @board = board
   end
 
+  def set_players_names
+    self.player_1.name = "Player 1"
+    self.player_2.name = "Player 2"
+  end
+
   def current_player
     if self.board.turn_count % 2 == 0
       self.player_1
@@ -62,6 +67,7 @@ class Game
   end
 
   def turn
+    self.board.display
     player = self.current_player
     user_input = player.move(self.board)
     if self.board.valid_move?(user_input)
@@ -73,6 +79,7 @@ class Game
   end
 
   def play
+    self.set_players_names
     while !self.over?
       self.turn
     end
