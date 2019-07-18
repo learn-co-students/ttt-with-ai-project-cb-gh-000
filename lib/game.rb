@@ -72,6 +72,7 @@ class Game
     user_input = player.move(self.board)
     if self.board.valid_move?(user_input)
       self.board.update(user_input, player)
+      self.board.display
     else
       puts "Invalid move"
       turn

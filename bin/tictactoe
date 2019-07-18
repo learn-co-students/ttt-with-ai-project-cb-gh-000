@@ -2,16 +2,38 @@
 
 require_relative '../config/environment'
 
-puts "Hi! and Welcome to the very game of: "
-sleep(2)
+puts "Hi! and Welcome to the Game of: "
+sleep(1)
 print "TIC"
-sleep(2)
+sleep(1)
 print " - "
 print "TAC"
-sleep(2)
+sleep(1)
 print " - "
-print "TOE"
+puts "TOE"
+sleep(1)
+puts "\n"
+puts "Which kind of game would you like to play?"
+puts "\n"
+puts "0 Players. 1 Player. 2 Players."
+puts "\n"
+print "Enter the number to continue: "
+puts "\n"
 
-game = Game.new
+input = gets.strip.to_i
+if input == 0
+  player_1 = Players::Computer.new("X")
+  player_2 = Players::Computer.new("O")
+  game = Game.new(player_1, player_2)
+elsif input == 1
+  player_1 = Players::Human.new("X")
+  player_2 = Players::Computer.new("O")
+  game = Game.new(player_1, player_2)
+elsif input == 2
+  game = Game.new
+end
 
+puts "\n"
+
+# Gameplay
 game.play
