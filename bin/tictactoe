@@ -2,6 +2,16 @@
 
 require_relative '../config/environment'
 
+puts "Hi! and Welcome to the very game of: "
+sleep(2)
+print "TIC"
+sleep(2)
+print " - "
+print "TAC"
+sleep(2)
+print " - "
+print "TOE"
+
 game = Game.new
 
 game.play
