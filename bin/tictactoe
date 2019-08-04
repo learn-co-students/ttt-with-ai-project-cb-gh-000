@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../config/environment'
+require '../config/environment.rb'
 
 puts "Hi! and Welcome to the Game of: "
 sleep(1)
