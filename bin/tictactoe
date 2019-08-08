@@ -1,3 +1,46 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+def playerMaker(s, t)
+  if s == 'h'
+    Players::Human.new(t)
+  else
+    Players::Computer.new(t)
+  end
+end
+
+puts "    TIC TAC TOE    "
+puts "-------------------"
+puts "Player 1 human or computer?(h/c)"
+
+p1info = gets.chomp
+puts p1info
+while !(p1info == 'h' || p1info == 'c')
+  puts "Player 1 human or computer?(h/c)"
+  p1info = gets.chomp
+  puts p1info
+end
+
+puts "Player 2 human or computer?(h/c)"
+p2info = gets.chomp
+while !(p2info == 'h' || p2info == 'c')
+  puts "Player 2 human or computer?(h/c)"
+  p2info = gets.chomp
+end
+
+puts "Who wants to go first player 1 or 2"
+first = gets.chomp.to_i
+
+if first == 1
+  p1 = playerMaker(p1info, "X")
+  p2 = playerMaker(p2info, "O")
+else
+  p2 = playerMaker(p1info, "X")
+  p1 = playerMaker(p2info, "O")
+end
+
+board = Board.new()
+game = Game.new(p1, p2, board)
+
+game.play()
