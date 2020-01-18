@@ -1,3 +1,37 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+puts "Welcome in tictactoe Game"
+
+
+puts "How would you like to play ?"
+puts "1. AI vs AI"
+puts "2. P1 vs AI"
+puts "3. P1 vs P2"
+puts "Type `exit` to quit the game"
+
+loop do
+  input = gets.strip
+
+  case input
+    when "1"
+      game = Game.new(Players::Computer.new("X"), Players::Computer.new("O"))
+      game.play
+      break
+
+    when "2"
+      game = Game.new(Players::Human.new("X"), Players::Computer.new("O"))
+      game.play
+      break
+
+    when "3"
+      game = Game.new(Players::Human.new("X"), Players::Human.new("O"))
+      game.play
+      break
+
+    when "exit"
+      break
+  end
+
+end
