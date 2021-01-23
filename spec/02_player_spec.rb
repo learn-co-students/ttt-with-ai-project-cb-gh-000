@@ -1,8 +1,9 @@
 require 'spec_helper'
 
+
 describe 'Player' do
 
-  describe '#initialize' do
+  describe 'initialize' do
     it 'accepts a token to assign' do
       player = Player.new("X")
       expect(player.token).to eq("X")
